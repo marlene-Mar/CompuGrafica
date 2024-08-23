@@ -1,5 +1,5 @@
  /* Práctica 2: Proyecciones y transformaciones
- * Marleene Mariana De la Cruz Padilla
+ * Marlene Mariana De la Cruz Padilla
  * Fecha de entrega: 25 de agosto de 2024
  */
 
