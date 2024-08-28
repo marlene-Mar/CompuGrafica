@@ -1,3 +1,8 @@
+/* Práctica 3 Modelado Geométrico
+* Marlene Mariana De la Cruz Padilla
+* Fecha de entrega: 1 de septiembre de 2024
+*/
+
 #include<iostream>
 
 //#define GLEW_STATIC
@@ -35,7 +40,7 @@ int main() {
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Modelado geometrico", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Modelado geometrico Marlene", nullptr, nullptr);
 
 	int screenWidth, screenHeight;
 
@@ -197,38 +202,55 @@ int main() {
 	
 
 		glBindVertexArray(VAO);
-	
+		//cabeza y cuerpo de pato
 	    model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(3.0f, 0.1f, 2.0f)); //ancho, grosor y profundidad
-		model = glm::translate(model, glm::vec3(0.0f, 0.6f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 1.0f, 0.5f)); //ancho, grosor y profundidad
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); //posición del cuerpo
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		//pico del pato
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.4f, 0.2f, 0.3f)); //ancho, grosor y profundidad
+		model = glm::translate(model, glm::vec3(0.8f, 0.4f, 0.0)); //posición del pico
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		
+		//Cola
+		model = glm::mat4(1.0f);
+		model = glm::scale(model, glm::vec3(0.45f, 0.3f, 0.5f)); //ancho, grosor y profundidad
+		model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.3f)); //posición de la cola
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		//patas
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(2.9f, -0.6f, 1.9f)); //posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36); 
+		//model = glm::mat4(1.0f);
+		//model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
+		//model = glm::translate(model, glm::vec3(2.9f, -0.6f, 1.9f)); //posición de la pata
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glDrawArrays(GL_TRIANGLES, 0, 36); 
 
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(-2.9f, -0.6f, 1.9f)); //posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//model = glm::mat4(1.0f);
+		//model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
+		//model = glm::translate(model, glm::vec3(-2.9f, -0.6f, 1.9f)); //posición de la pata
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); //posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//model = glm::mat4(1.0f);
+		//model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
+		//model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); //posición de la pata
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); //posición de la pata
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		//model = glm::mat4(1.0f);
+		//model = glm::scale(model, glm::vec3(0.1f, 0.6f, 0.1f)); //tamaño de la pata
+		//model = glm::translate(model, glm::vec3(2.9f, -0.6f, -1.9f)); //posición de la pata
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(0);
+
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	
