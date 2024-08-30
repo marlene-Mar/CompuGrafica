@@ -202,6 +202,9 @@ int main() {
 
 
 		glBindVertexArray(VAO);
+
+		//Estructura de pato, con distintas rotaciones con el fin de que se observará cada parte
+		
 		//cabeza y cuerpo de pato
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(0.5f, 1.0f, 0.5f)); //ancho, grosor y profundidad
@@ -243,14 +246,15 @@ int main() {
 		
 		//pata 1
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.40f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(-0.2f, -1.5f, -1.2f)); //posición de la pata
+		model = glm::scale(model, glm::vec3(0.1f, 0.40f, 0.1f)); //ancho, grosor y profundidad
+		model = glm::translate(model, glm::vec3(-0.2f, -1.5f, -1.2f)); //posición de la pata 1
 		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36); 
 
+		//parte pata 1
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.28f, 0.1f, 0.15f)); //tamaño de la pata
+		model = glm::scale(model, glm::vec3(0.28f, 0.1f, 0.15f)); //ancho, grosor y profundidad
 		model = glm::translate(model, glm::vec3(-0.1f, -8.5f, -0.8f)); //posición de la pata
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -258,14 +262,15 @@ int main() {
 
 		//pata 2
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.1f, 0.40f, 0.1f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(-0.9f, -1.5f, 1.2f)); //posición de la pata
+		model = glm::scale(model, glm::vec3(0.1f, 0.40f, 0.1f)); //ancho, grosor y pofundidad
+		model = glm::translate(model, glm::vec3(-0.9f, -1.5f, 1.2f)); //posición de la pata 2
 		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		//parte pata 2
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.28f, 0.1f, 0.15f)); //tamaño de la pata
+		model = glm::scale(model, glm::vec3(0.28f, 0.1f, 0.15f)); //ancho, grosor y pofundidad
 		model = glm::translate(model, glm::vec3(-0.2f, -8.5f, 0.8f)); //posición de la pata
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -273,16 +278,16 @@ int main() {
 
 		//Ojo 1
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.05f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 5.0f)); //posición de la pata
+		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.05f)); //ancho, grosor y pofundidad
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 5.0f)); //posición del ojo 2
 		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		//Ojo 2
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.05f)); //tamaño de la pata
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -5.0f)); //posición de la pata
+		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.05f)); //ancho, grosor y pofundidad
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -5.0f)); //posición del ojo 2
 		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
