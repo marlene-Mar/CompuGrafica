@@ -1,3 +1,8 @@
+/*Práctica 4: Modelo Jerárquico
+* Marlene Mariana De la Cruz Padilla 
+* Fecha de entrega: 8 de septiembre del 2024
+*/
+
 #include<iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -21,8 +26,8 @@ movZ = -5.0f,
 rot = 0.0f;
 
 //For model
-float	hombro = 0.0f, codo = 0.0f, muneca = 0.0f, dedo1 = 0.0f,
-	dedo2=0.0f;
+float	hombro = 0.0f, codo = 0.0f, muneca = 0.0f, 
+	dedo1 = 0.0f, dedo2 =0.0f, dedo3 = 0.0f, dedo4 =0.0f;
 
 
 int main() {
@@ -36,7 +41,7 @@ int main() {
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Modelado jerarquico", nullptr, nullptr);
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Modelado jerarquico Marlene", nullptr, nullptr);
 
 	int screenWidth, screenHeight;
 
@@ -254,6 +259,68 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//E
 
+		//Resto de dedos 
+		
+		//Model dedo2 A
+		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.4f));
+		model = glm::rotate(model, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(0.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//F
+
+		//Model dedo2 B
+		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(1.0f, 0.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//H
+
+		//Model dedo 3 A
+		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.4f));
+		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(0.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//H
+
+		//Model dedo 3 B
+		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, -0.4f));
+		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(1.0f, 0.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//H
+
+		//Model dedo4 A
+		model = glm::translate(modelTemp, glm::vec3(-0.5f, -0.6f, 0.0f));
+		model = glm::rotate(model, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(0.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//F
+
+		//Model dedo4 B
+		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
+		color = glm::vec3(1.0f, 0.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 36);//H
+
 		glBindVertexArray(0);
 
 		
@@ -269,45 +336,47 @@ int main() {
 	return EXIT_SUCCESS;
  }
 
- void Inputs(GLFWwindow *window) {
-	 if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //GLFW_RELEASE
-		 glfwSetWindowShouldClose(window, true);
-	 if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		 movX += 0.01f;
-	 if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		 movX -= 0.01f;
-	 if (glfwGetKey(window,GLFW_KEY_U) == GLFW_PRESS)
-		 movY += 0.01f;
-	 if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		 movY -= 0.01f;
-	 if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		 movZ -= 0.01f;
-	 if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		 movZ += 0.01f;
-	 if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		 rot += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		 rot -= 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-		 hombro += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		 hombro -= 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		 codo += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-		 codo -= 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-		 muneca += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		 muneca -= 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-		 dedo1 += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-		 dedo1 -= 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
-		 dedo2 += 0.18f;
-	 if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
-		 dedo2 -= 0.18f;
+ //Restricciones de rotación y movimiento por teclado
+void Inputs(GLFWwindow* window) {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //GLFW_RELEASE
+		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		movX += 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		movX -= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+		movY += 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+		movY -= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		movZ -= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		movZ += 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		rot += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		rot -= 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+		hombro += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+		hombro -= 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		//if (90.0f < codo)
+			codo += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+		//if (90.0f < codo)
+			codo -= 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+		muneca += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+		muneca -= 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		dedo1 += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+		dedo2 += 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+		dedo2 -= 0.18f;
+
  }
 
 
