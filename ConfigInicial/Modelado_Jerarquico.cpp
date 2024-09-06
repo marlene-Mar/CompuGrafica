@@ -282,9 +282,9 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);//H
 
 		//Model dedo 3 A
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.4f));
+		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.3f));
 		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
@@ -336,7 +336,7 @@ int main() {
 	return EXIT_SUCCESS;
  }
 
- //Restricciones de rotación y movimiento por teclado
+ //Restricciones de rotación y movimiento por teclado para brazo izquierdo
 void Inputs(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //GLFW_RELEASE
 		glfwSetWindowShouldClose(window, true);
@@ -356,26 +356,49 @@ void Inputs(GLFWwindow* window) {
 		rot += 0.18f;
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		rot -= 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-		hombro += 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		hombro -= 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		//if (90.0f < codo)
-			codo += 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-		//if (90.0f < codo)
-			codo -= 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-		muneca += 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		muneca -= 0.18f;
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+		hombro += 0.1f;
+		if (hombro > 90.0f) // Restricción de hombro a 90° hacia arriba
+			hombro = 90.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+		hombro -= 0.1f;
+		if (hombro < -90.0f) // Restricción de hombro a -90° hacia abajo
+			hombro = -90.0f;
+	}
+	//Se considero el movimiento de un codo de brazo izquierdo para observarlo mejor
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+		codo += 0.1f;
+		if (codo > 0.0f) // Restricción de codo a 0°
+			codo = 0.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+		codo -= 0.1f;
+		if (codo < -90.0f) // Restricción de codo para que llegue a 90°
+			codo = -90.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+		muneca += 0.1f;
+		if (muneca > 90.0f) // Restricción de muñeca a 90°
+			muneca = 90.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+		muneca -= 0.1f;
+		if (muneca < -90.0f) // Restricción de codo a -90°
+			muneca = -90.0f;
+	}
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		dedo1 += 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-		dedo2 += 0.18f;
-	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		dedo2 -= 0.18f;
+		dedo1 += 0.1f;
+		dedo2 += 0.1f;
+		dedo3 += 0.1f; 
+		dedo4 += 0.1f;
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		dedo2 -= 0.10f;
+		dedo2 -= 0.1f;
+		dedo3 -= 0.1f;
+		dedo4 -= 0.1f;
+	/*if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)*/
+		//dedo2 -= 0.18f;
 
  }
 
