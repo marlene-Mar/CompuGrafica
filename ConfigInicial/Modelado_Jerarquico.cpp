@@ -27,7 +27,8 @@ rot = 0.0f;
 
 //For model
 float	hombro = 0.0f, codo = 0.0f, muneca = 0.0f, 
-	dedo1 = 0.0f, dedo2 =0.0f, dedo3 = 0.0f, dedo4 =0.0f;
+	dedo1 = 0.0f, dedo2 =0.0f, dedo3 = 0.0f, dedo4 =0.0f,
+	dedo5 = 0.0f, dedo6= 0.0f, dedo7 = 0.0f, dedo8 = 0.0f;
 
 
 int main() {
@@ -282,8 +283,8 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);//H
 
 		//Model dedo 3 A
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.3f));
-		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(modelTemp, glm::vec3(-0.5f, 0.0f, -0.4f));
+		model = glm::rotate(model, glm::radians(dedo5), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f);
@@ -292,8 +293,8 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);//H
 
 		//Model dedo 3 B
-		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, -0.4f));
-		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(dedo6), glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
 		color = glm::vec3(1.0f, 0.0f, 1.0f);
@@ -301,9 +302,10 @@ int main() {
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);//H
 
-		//Model dedo4 A
-		model = glm::translate(modelTemp, glm::vec3(-0.5f, -0.6f, 0.0f));
-		model = glm::rotate(model, glm::radians(dedo3), glm::vec3(0.0f, 0.0f, 1.0f));
+		//Model dedo4 A 
+		//Se usa ModelTemp2 para que el dedo7 no dependa de los dedos de arriba
+		model = glm::translate(modelTemp2, glm::vec3(0.2f, -0.3f, 0.0f));
+		model = glm::rotate(model, glm::radians(dedo7), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelTemp = model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f);
@@ -313,7 +315,7 @@ int main() {
 
 		//Model dedo4 B
 		model = glm::translate(modelTemp, glm::vec3(0.5f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(dedo4), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(dedo8), glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 0.3f, 0.25f));
 		color = glm::vec3(1.0f, 0.0f, 1.0f);
@@ -387,18 +389,34 @@ void Inputs(GLFWwindow* window) {
 		if (muneca < -90.0f) // Restricción de codo a -90°
 			muneca = -90.0f;
 	}
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 		dedo1 += 0.1f;
-		dedo2 += 0.1f;
-		dedo3 += 0.1f; 
-		dedo4 += 0.1f;
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		dedo2 -= 0.10f;
-		dedo2 -= 0.1f;
+		dedo3 += 0.1f;
+		dedo5 += 0.1f;
+		if (dedo1 > 0.0f) dedo1 = 0.0f;
+		if (dedo3 > 0.0f) dedo3 = 0.0f;
+		if (dedo5 > 0.0f) dedo5 = 0.0f;
+		
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		dedo1 -= 0.1f;
 		dedo3 -= 0.1f;
-		dedo4 -= 0.1f;
-	/*if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)*/
-		//dedo2 -= 0.18f;
+		dedo5 -= 0.1f;
+		if (dedo1 < -30.0f) dedo1 = -30.0f;
+		if (dedo3 < -30.0f) dedo3 = -30.0f;
+		if (dedo5 < -30.0f) dedo5 = -30.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+		dedo7 += 0.1f;
+		if (dedo7 > 30.0f)
+			dedo7 = 30.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+		dedo7 -= 0.1f;
+		if (dedo7 < 0.0f)
+			dedo7 = 0.0f;
+	}
+
 
  }
 
