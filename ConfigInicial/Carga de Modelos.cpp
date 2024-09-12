@@ -1,3 +1,7 @@
+/*Práctica 5 Carga de modelos
+De la Cruz Padilla Marlene Mariana 
+Fecha de entrega: 15 de septiembre de 2024*/
+
 // Std. Includes
 #include <string>
 
@@ -22,7 +26,7 @@
 #include "stb_image.h"
 
 // Properties
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1200, HEIGHT = 800;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // Function prototypes
@@ -54,7 +58,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Carga de modelos y camara sintetica", nullptr, nullptr );
+    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Carga de modelos y camara sintetica Marlene", nullptr, nullptr );
     
     if ( nullptr == window )
     {
@@ -94,7 +98,9 @@ int main( )
     Shader shader( "Shader/modelLoading.vs", "Shader/modelLoading.frag" );
     
     // Load models
-    Model dog((char*)"Models/RedDog.obj"); //Ruta de donde se encuentra el archivo 3D
+    Model dog((char*)"Models/RedDog.obj"); //Ruta de donde se encuentra el archivo 3D perro del previo
+    Model dog2((char*)"Models/13041_Beagle_v1_L1.obj"); //Ruta de perro2 3D
+    Model casa((char*)"Models/farmhouse_obj.obj"); //Ruta de la casa 3D
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
   
@@ -122,14 +128,36 @@ int main( )
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
         // Draw the loaded model
+
+        
+
+        //Dibujo de modelo de casa
+        glm::mat4 modelCasa(1);
+        modelCasa = glm::rotate(modelCasa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de casa
+        modelCasa = glm::translate(modelCasa, glm::vec3(0.0f, 0.0f, 0.0f));  // Traslada casa a otra posición
+        modelCasa = glm::scale(modelCasa, glm::vec3(0.2f, 0.2f, 0.2f));       // Escala el modelo 
+        
+        //Perro 1 del previo
         glm::mat4 model(1);
+        model = glm::translate(model, glm::vec3(1.3f, 0.7f, 2.5f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         dog.Draw(shader); //Se dibuja el perro
 
-        model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        dog.Draw(shader);
+        //Dibujar perro 2
+        glm::mat4 modelDog2(1);
+        modelDog2 = glm::rotate(modelDog2, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 1.0f)); //rotación de perro 2
+        modelDog2 = glm::translate(modelDog2, glm::vec3(1.0f, 2.5f, 0.28f));  // Traslada dog2 a otra posición
+        modelDog2 = glm::scale(modelDog2, glm::vec3(0.01f, 0.01f, 0.01f));       // Escala el modelo
+
+
+
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelDog2));
+        dog2.Draw(shader);
+
+        
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCasa));
+        casa.Draw(shader);
 
         // Swap the buffers
         glfwSwapBuffers( window );
