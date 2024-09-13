@@ -101,6 +101,11 @@ int main( )
     Model dog((char*)"Models/RedDog.obj"); //Ruta de donde se encuentra el archivo 3D perro del previo
     Model dog2((char*)"Models/13041_Beagle_v1_L1.obj"); //Ruta de perro2 3D
     Model casa((char*)"Models/farmhouse_obj.obj"); //Ruta de la casa 3D
+    Model tronco((char*)"Models/trunk wood.obj"); //Ruta del tronco
+    Model pasto((char*)"Models/10450_Rectangular_Grass_Patch_v1_iterations-2.obj"); //Ruta del pasto 3D
+    Model columpio((char*)"Models/Obj.obj"); //Ruta del columpio 3D
+    Model pozo((char*)"Models/3d we.obj"); //Ruta del pozo 3D
+
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
   
@@ -129,32 +134,68 @@ int main( )
 
         // Draw the loaded model
 
-        
-
         //Dibujo de modelo de casa
         glm::mat4 modelCasa(1);
         modelCasa = glm::rotate(modelCasa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de casa
         modelCasa = glm::translate(modelCasa, glm::vec3(0.0f, 0.0f, 0.0f));  // Traslada casa a otra posición
         modelCasa = glm::scale(modelCasa, glm::vec3(0.2f, 0.2f, 0.2f));       // Escala el modelo 
         
-        //Perro 1 del previo
+        //Dibujo del modelo Perro 1 del previo
         glm::mat4 model(1);
         model = glm::translate(model, glm::vec3(1.3f, 0.7f, 2.5f));
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         dog.Draw(shader); //Se dibuja el perro
 
-        //Dibujar perro 2
+        //Dibujo del modelo perro 2
         glm::mat4 modelDog2(1);
         modelDog2 = glm::rotate(modelDog2, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 1.0f)); //rotación de perro 2
         modelDog2 = glm::translate(modelDog2, glm::vec3(1.0f, 2.5f, 0.28f));  // Traslada dog2 a otra posición
         modelDog2 = glm::scale(modelDog2, glm::vec3(0.01f, 0.01f, 0.01f));       // Escala el modelo
-
-
-
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelDog2));
         dog2.Draw(shader);
 
+        //Dibujo del modelo de pasto 
+        glm::mat4 modelPasto(1);
+        modelPasto = glm::rotate(modelPasto, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); //rotación del pasto
+        modelPasto = glm::translate(modelPasto, glm::vec3(0.0f, -1.0f, -0.5f));  // Traslada pasto a otra posición
+        modelPasto = glm::scale(modelPasto, glm::vec3(0.06f, 0.06f, 0.06f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPasto));
+        pasto.Draw(shader);
+
+        //Dibujo del modelo del tronco 
+        glm::mat4 modelTroco(1);
+        modelTroco = glm::translate(modelTroco, glm::vec3(2.3f, 0.0f, 0.0f));  // Traslada tronco 1 a otra posición
+        modelTroco = glm::scale(modelTroco, glm::vec3(1.5f, 1.5f, 1.5f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTroco));
+        tronco.Draw(shader);
+
+        glm::mat4 modelTroco2(1);
+        modelTroco2 = glm::translate(modelTroco2, glm::vec3(2.7f, 0.0f, 0.0f));  // Traslada tronco 2 a otra posición
+        modelTroco2 = glm::scale(modelTroco2, glm::vec3(1.5f, 1.5f, 1.5f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTroco2));
+        tronco.Draw(shader);
+
+        glm::mat4 modelTroco3(1);
+        modelTroco3 = glm::translate(modelTroco3, glm::vec3(2.5f, 0.3f, 0.0f));  // Traslada tronco 3 a otra posición
+        modelTroco3 = glm::scale(modelTroco3, glm::vec3(1.5f, 1.5f, 1.5f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelTroco3));
+        tronco.Draw(shader);
+
+        //Dibujo del modelo del columpio
+        glm::mat4 modelCol(1);
+        modelCol = glm::translate(modelCol, glm::vec3(5.5f, 0.0f, 0.5f));  // Traslada columpio a otra posición
+        modelCol = glm::scale(modelCol, glm::vec3(0.00035f, 0.00035f, 0.00035f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCol));
+        columpio.Draw(shader);
+
+        //Dibujo del modelo del pozo
+        glm::mat4 modelPozo(1);
+        modelPozo = glm::translate(modelPozo, glm::vec3(-5.0f, 0.1f, -5.0f));  // Traslada pozo a otra posición
+        modelPozo = glm::scale(modelPozo, glm::vec3(0.013f, 0.013f, 0.013f));       // Escala el modelo
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPozo));
+        pozo.Draw(shader);
+        
         
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCasa));
         casa.Draw(shader);
