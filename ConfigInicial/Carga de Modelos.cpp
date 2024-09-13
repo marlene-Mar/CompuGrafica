@@ -104,7 +104,7 @@ int main( )
     Model tronco((char*)"Models/trunk wood.obj"); //Ruta del tronco
     Model pasto((char*)"Models/10450_Rectangular_Grass_Patch_v1_iterations-2.obj"); //Ruta del pasto 3D
     Model columpio((char*)"Models/Obj.obj"); //Ruta del columpio 3D
-    Model pozo((char*)"Models/3d we.obj"); //Ruta del pozo 3D
+    Model pozo((char*)"Models/well.obj"); //Ruta del pozo 3D
 
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
     
@@ -191,8 +191,9 @@ int main( )
 
         //Dibujo del modelo del pozo
         glm::mat4 modelPozo(1);
-        modelPozo = glm::translate(modelPozo, glm::vec3(-5.0f, 0.1f, -5.0f));  // Traslada pozo a otra posición
-        modelPozo = glm::scale(modelPozo, glm::vec3(0.013f, 0.013f, 0.013f));       // Escala el modelo
+        modelPozo = glm::rotate(modelPozo, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); //rotación del pasto
+        modelPozo = glm::translate(modelPozo, glm::vec3(-5.0f, 5.0f, 1.2f));  // Traslada pozo a otra posición
+        modelPozo = glm::scale(modelPozo, glm::vec3(0.1f, 0.1f, 0.1f));       // Escala el modelo
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPozo));
         pozo.Draw(shader);
         

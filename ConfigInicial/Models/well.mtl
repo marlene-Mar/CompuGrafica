@@ -1,0 +1,118 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  5.7.0.4010 Release
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Material03
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd PebblyShale.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material01
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd CementBlock.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material02
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd Debris.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material06
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd 56703.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material04
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd BrownSuede.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material05
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd WoodPlanks.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material07
+Ka 0.498039 0.498039 0.498039
+Kd 1 1 1
+Ks 0.447059 0.447059 0.447059
+illum 2
+Ns 11.3137
+map_Kd BirdseyeMaple.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
