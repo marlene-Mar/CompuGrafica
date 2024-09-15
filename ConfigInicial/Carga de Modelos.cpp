@@ -139,6 +139,8 @@ int main( )
         modelCasa = glm::rotate(modelCasa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de casa
         modelCasa = glm::translate(modelCasa, glm::vec3(0.0f, 0.0f, 0.0f));  // Traslada casa a otra posición
         modelCasa = glm::scale(modelCasa, glm::vec3(0.2f, 0.2f, 0.2f));       // Escala el modelo 
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCasa));
+        casa.Draw(shader);
         
         //Dibujo del modelo Perro 1 del previo
         glm::mat4 model(1);
@@ -197,9 +199,6 @@ int main( )
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelPozo));
         pozo.Draw(shader);
         
-        
-        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCasa));
-        casa.Draw(shader);
 
         // Swap the buffers
         glfwSwapBuffers( window );
