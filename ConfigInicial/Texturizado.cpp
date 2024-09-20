@@ -1,6 +1,7 @@
 /*Práctica 6: Texturizado
 Marlene Mariana De la Cruz Padilla
 Fecha de entrega: 22 de septiembre de 2024*/
+
 #include <iostream>
 #include <cmath>
 
@@ -103,61 +104,70 @@ int main()
 	GLfloat vertices[] = {
 		// Positions          // Colors             // Texture Coords
 
-		//Cara 5
+		//Cara 5 ok 
 		-0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.65f,	//vertice inferior izq
 		 0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 0.65f,		//vertice inferior der
 		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 1.0f,		//vertice superior der
 		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 1.0f,		//vertice superior izq
 
-		//Cara 2
-		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.65f, 0.65f,   
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 0.65f,   
-		 0.5f,  0.5f, 0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 1.0f,   
-		-0.5f,  0.5f, 0.5f,  1.0f, 1.0f, 1.0f,    0.65f, 1.0f,   
+		//Cara 2 ok 
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.35f,	// vertice inferior izq
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 0.35f,		// vertice inferior der
+		 0.5f,  -0.5f, 0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 0.65f,		// vertice superior der
+		-0.5f,  -0.5f, 0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.65f,	// vertice superior izq
 
-		//Cara 6
-		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 0.0f,   // Top-right
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 1.0f,   // Top-left
-		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 1.0f,   // Bottom-left
-		-0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 0.0f,   // Bottom-right
+		//Cara 6 ok 
+		-0.5f,  0.5f,  -0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.0f,	// vertice inferior izq
+		 0.5f,  0.5f,  -0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 0.0f,		// vertice inferior der
+		 0.5f,  -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.5f, 0.35f,	// vertice superior der
+		-0.5f,  -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.35f,	// vertice superior izq
 
-		// Right face
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 0.0f,   // Top-left
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 1.0f,   // Top-right
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 1.0f,   // Bottom-right
-		 0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 0.0f,   // Bottom-left
+		//Cara 3
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	   0.5f, 0.35f,		// vertice inferior izq
+		0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f,	   0.75f, 0.35f,	// vertice inferior der
+		0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 1.0f,     0.75f, 0.65f,		// vertice superior der
+		0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 1.0f,	   0.5f, 0.65f,	// vertice superior izq
 
-		 // Top face
-		 -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 1.0f,   // Top-left
-		  0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 1.0f,   // Top-right
-		  0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 0.0f,   // Bottom-right
-		 -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 0.0f,   // Bottom-left
+		//Cara 1 
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 0.35f,		// vertice inferior izq
+		-0.5f,  -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,   0.25f, 0.35f,	// vertice inferior der
+		-0.5f,  -0.5f, 0.5f,  1.0f, 1.0f, 1.0f,    0.25f, 0.65f,	// vertice superior der
+		-0.5f,  0.5f, 0.5f,  1.0f, 1.0f, 1.0f,	   0.0f, 0.65f,		// vertice superior izq
 
-		 // Bottom face
-		 -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 1.0f,   // Top-left
-		  0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 1.0f,   // Top-right
-		  0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    1.0f, 0.0f,   // Bottom-right
-		 -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,    0.0f, 0.0f    // Bottom-left
+		//Cara 4
+		0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f,		0.75f, 0.35f,		// vertice inferior izq
+		-0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f,		1.0f, 0.35f,	// vertice inferior der
+		-0.5f, 0.5f, 0.5f,  1.0f, 1.0f, 1.0f,		1.0f, 0.65f,	// vertice superior der
+		0.5f,  0.5f, 0.5f,  1.0f, 1.0f, 1.0f,		0.75f, 0.65f,		// vertice superior izq
 	};
-
 
 	GLuint indices[] =
 	{  // Note that we start from 0!
+
+		//Cara 5
 		0,1,3,
 		1,2,3,
-		4,5,6,
-		4,6,7,
-		8,9,10,
-		8,10,11,
-		12,13,14,
-		12,14,15,
-		16,17,18,
-		16,18,19,
-		20,21,22,
-		20,22,23
 
-		
-	
+		//Cara 2
+		4,5,7,
+		5,6,7,
+
+		//Cara 6
+		8,9,11,
+		9,10,11,
+
+		//Cara 3
+		12,13,15,
+		13,14,15,
+
+		//Cara 1
+		16,17,19,
+		17,18,19,
+
+		//Cara 4
+		20,21,23,
+		21,22,23
+
 	};
 
 	// First, set the container's VAO (and VBO)
@@ -252,7 +262,7 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		// Draw the light object (using light's vertex attributes)
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 13, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		// Swap the screen buffers
