@@ -33,6 +33,11 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void DoMovement();
 
+//Para el control de dia/noche
+float moonRotate = 0.0f;
+float sunRotate = 0.0f;
+bool moveMoon = false;
+bool moveSun = true;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -117,6 +122,7 @@ int main()
     Model columpio((char*)"Models/Obj.obj"); //Ruta del columpio 3D
     Model pozo((char*)"Models/well.obj"); //Ruta del pozo 3D
     Model luna((char*)"Models/Moon 2K.obj"); //Ruta de la luna 3D
+    Model sol((char*)"Models/objStar.obj"); //Ruta del sol 3D
 
 
     glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -180,19 +186,21 @@ int main()
     glEnableVertexAttribArray(1);
 
     // Load textures
+    int textureWidth, textureHeight, nrChannels;
+    unsigned char* image;
 
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    int textureWidth, textureHeight, nrChannels;
+    
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* image;
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    image = stbi_load("Models/Texture_albedo.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+    
+    /*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);*/
 
-    image = stbi_load("Models/Texture_albedo.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     if (image)
@@ -205,6 +213,37 @@ int main()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(image);
+
+    // Configuración de parámetros de la textura
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //Textura para la luna
+    GLuint moonTexture;
+    glGenTextures(1, &moonTexture);
+    glBindTexture(GL_TEXTURE_2D, moonTexture);
+
+    //stbi_set_flip_vertically_on_load(true);
+    image = stbi_load("Models/moon.jpg", &textureWidth, &textureHeight, &nrChannels, 0);
+
+    if (image)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load moon texture" << std::endl;
+    }
+    stbi_image_free(image);
+
+    // Configuración de parámetros de la textura
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
     // Game loop
@@ -223,7 +262,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        
+
         lightingShader.Use();
         GLint lightPosLoc = glGetUniformLocation(lightingShader.Program, "light.position");
         GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
@@ -264,7 +303,7 @@ int main()
         glBindVertexArray(VAO);
         red_dog.Draw(lightingShader);*/
         //glDrawArrays(GL_TRIANGLES, 0, 36);
-        
+
 
         //Actividad del previo: Carga de segundo modelo
         //glm::mat4 modelTronco = glm::mat4(1.0f);
@@ -274,7 +313,7 @@ int main()
         //tronco.Draw(lightingShader);
 
         //Dibujo de modelos 
-        
+
         //Dibujo de modelo de casa
         glm::mat4 modelCasa(1);
         modelCasa = glm::rotate(modelCasa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de casa
@@ -343,33 +382,48 @@ int main()
         glBindVertexArray(0);
 
 
-        //Luz 1 - Luna
+        //
         lampshader.Use();
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 
-        //dibujo de luz 1
-        glm::mat4 modelLuna(1);
-        modelLuna = glm::translate(modelLuna, lightPos + movelightPos);
-        //model = glm::scale(model, glm::vec3(0.3f));  
-        modelLuna = glm::scale(modelLuna, glm::vec3(0.5f));       // Escala el modelo
-        glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLuna));
-        glBindVertexArray(VAO);
-        luna.Draw(lampshader);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        //dibujo de luz 1 -LUNA
+        
+        if (moveMoon) {
+            glm::mat4 modelLuna(1);
+            modelLuna = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+            modelLuna = glm::translate(modelLuna, glm::vec3(15.0f, 0.0f, 0.0f));
+            modelLuna = glm::rotate(modelLuna, glm::radians(moonRotate), glm::vec3(0.0f, 0.0f, 1.0f));
+            modelLuna = glm::scale(modelLuna, glm::vec3(0.5f));       // Escala el modelo
+ 
+            // modelLuna = glm::translate(modelLuna, lightPos + movelightPos);
+            glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLuna));
+            glBindVertexArray(VAO);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, moonTexture);
+            glUniform1i(glGetUniformLocation(lampshader.Program, "material.diffuse"), 0);
+            luna.Draw(lampshader);
+            //glDrawArrays(GL_TRIANGLES, 0, 36);
+            glBindVertexArray(0);
 
+        }
+    
 
-        //Dibujo luz 2
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, newLightPos + movelightPos);
-        model = glm::scale(model, glm::vec3(0.3f));  
-        glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
-
+        //Dibujo de luz 2 -SOL
+        
+        if (moveSun) {
+            glm::mat4 modelSol(1);
+            modelSol = glm::translate(modelSol, glm::vec3(0.0f, 0.0f, 0.0f));
+            //modelSol = glm::translate(modelSol, newLightPos + movelightPos);
+            modelSol = glm::translate(modelSol, glm::vec3(-15.0f, 0.0f, 0.0f));
+            modelSol = glm::scale(modelSol, glm::vec3(1.0f));
+            glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSol));
+            glBindVertexArray(VAO);
+            sol.Draw(lampshader);
+            //glDrawArrays(GL_TRIANGLES, 0, 36);
+            glBindVertexArray(0);
+        }
         // Swap the buffers
         glfwSwapBuffers(window);
     }
@@ -412,6 +466,7 @@ void DoMovement()
             rot -= 0.1f;
     }
 
+
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -434,16 +489,29 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         }
     }
 
-    if (keys[GLFW_KEY_O])
+    if (keys[GLFW_KEY_M])
     {
-       
-        movelightPos += 0.1f;
+        moveMoon = true;
+        moveSun = false;
     }
 
-    if (keys[GLFW_KEY_L])
+    if (keys[GLFW_KEY_N])
     {
+        moveMoon = false;
+        moveSun = true;
         
-        movelightPos -= 0.1f;
+    }
+    //Limitación a 180° de la luna
+    if (keys[GLFW_KEY_L]) {
+        moonRotate -= 0.1f;
+        if (moonRotate < 180.0f) 
+            moonRotate = 180.0f;
+    }
+    //Limitación a 180° deL sol
+    if (keys[GLFW_KEY_O]) {
+        sunRotate += 0.1f;
+        if (sunRotate > 180.0f)
+            sunRotate = 180.0f;
     }
 
 
