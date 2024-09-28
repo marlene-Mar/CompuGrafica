@@ -35,7 +35,7 @@ void DoMovement();
 
 //Para el control de dia/noche
 float moonRotate = 0.0f;
-float sunRotate = 0.0f;
+float sunRotate = -180.0f;
 bool moveMoon = false;
 bool moveSun = true;
 
@@ -274,15 +274,42 @@ int main()
         glUniform3f(newLightPosLoc, newLightPos.x + movelightPos, newLightPos.y + movelightPos, newLightPos.z + movelightPos);
 
         // Configurar propiedades de la nueva luz
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.ambient"), 0.2f, 0.2f, 0.2f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.diffuse"), 0.5f, 0.5f, 0.5f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.specular"), 1.0f, 1.0f, 1.0f);
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.ambient"), 0.2f, 0.2f, 0.2f);
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.diffuse"), 0.5f, 0.5f, 0.5f);
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.specular"), 1.0f, 1.0f, 1.0f);
 
-        // Set lights properties
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.3f, 0.3f, 0.3f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 0.2f, 0.7f, 0.8f);
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 0.3f, 0.6f, 0.4f);
+        //// Set lights properties
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.3f, 0.3f, 0.3f);
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 0.2f, 0.7f, 0.8f);
+        //glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 0.3f, 0.6f, 0.4f);
 
+
+        //Visualizar el día y la noche
+        if (moveSun) {
+            // Configuración para el día (Sol)
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.5f, 0.5f, 0.3f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 1.0f, 1.0f, 0.6f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 0.9f);
+
+            // Materiales que simulan el día
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.6f, 0.6f, 0.5f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.8f, 0.8f, 0.6f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.9f, 0.9f, 0.7f);
+            glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 32.0f);
+        }
+
+        if (moveMoon) {
+            // Configuración para la noche (Luna)
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"), 0.4f, 0.4f, 0.6f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 0.6f, 0.6f, 1.0f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 1.4f);
+
+            // Materiales que simulan la noche
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.2f, 0.2f, 0.3f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.3f, 0.3f, 0.4f);
+            glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.4f, 0.4f, 0.5f);
+            glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 16.0f);
+        }
 
         glm::mat4 view = camera.GetViewMatrix();
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -290,10 +317,10 @@ int main()
 
         // Set material properties
 
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.5f, 0.5f, 0.5f);
+        /*glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"), 0.5f, 0.5f, 0.5f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0.7f, 0.2f, 0.4f);
         glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"), 0.6f, 0.6f, 0.6f);
-        glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 0.6f);
+        glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 0.6f);*/
 
 
         // Draw the loaded model
@@ -314,13 +341,20 @@ int main()
 
         //Dibujo de modelos 
 
+        //Como la jerarquía en OpenGL es como se dibuja, se dibuja primero la casa y posteriormente las luces
+        
         //Dibujo de modelo de casa
         glm::mat4 modelCasa(1);
+        glm::mat4 modelTemp = glm::mat4(1.0f);
+
         modelCasa = glm::rotate(modelCasa, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación de casa
         modelCasa = glm::translate(modelCasa, glm::vec3(0.0f, 0.0f, 0.0f));  // Traslada casa a otra posición
+        modelTemp = modelCasa = glm::translate(modelCasa, glm::vec3(0.0f, 0.0f, 0.0f));
+
         modelCasa = glm::scale(modelCasa, glm::vec3(0.2f, 0.2f, 0.2f));       // Escala el modelo 
         glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelCasa));
         casa.Draw(lightingShader);
+
 
         //Dibujo del modelo Perro 1 del previo
         glm::mat4 model(1);
@@ -382,52 +416,64 @@ int main()
         glBindVertexArray(0);
 
 
-        //
+        //Sección de luces
         lampshader.Use();
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 
         //dibujo de luz 1 -LUNA
-        
+
         if (moveMoon) {
             glm::mat4 modelLuna(1);
-            modelLuna = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-            modelLuna = glm::translate(modelLuna, glm::vec3(15.0f, 0.0f, 0.0f));
-            modelLuna = glm::rotate(modelLuna, glm::radians(moonRotate), glm::vec3(0.0f, 0.0f, 1.0f));
-            modelLuna = glm::scale(modelLuna, glm::vec3(0.5f));       // Escala el modelo
- 
-            // modelLuna = glm::translate(modelLuna, lightPos + movelightPos);
+
+            // Calcula la posición en el arco basado en moonRotate
+            float radius = 15.0f;
+            float xPos = radius * cos(glm::radians(moonRotate));
+            float yPos = radius * sin(glm::radians(moonRotate));
+
+            modelLuna = glm::translate(modelLuna, glm::vec3(xPos, -yPos, 0.0f));
+            modelLuna = glm::rotate(modelLuna, glm::radians(moonRotate), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelLuna = glm::scale(modelLuna, glm::vec3(0.5f)); // Escala el modelo
+
             glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelLuna));
             glBindVertexArray(VAO);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, moonTexture);
             glUniform1i(glGetUniformLocation(lampshader.Program, "material.diffuse"), 0);
             luna.Draw(lampshader);
-            //glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
-
         }
-    
 
         //Dibujo de luz 2 -SOL
-        
+
         if (moveSun) {
             glm::mat4 modelSol(1);
-            modelSol = glm::translate(modelSol, glm::vec3(0.0f, 0.0f, 0.0f));
-            //modelSol = glm::translate(modelSol, newLightPos + movelightPos);
-            modelSol = glm::translate(modelSol, glm::vec3(-15.0f, 0.0f, 0.0f));
-            modelSol = glm::scale(modelSol, glm::vec3(1.0f));
+
+            // Calcula la posición en el arco basado en sunRotate
+            float radius = -15.0f;
+            float xPos = radius * cos(glm::radians(sunRotate));
+            float yPos = radius * sin(glm::radians(sunRotate));
+
+            // Traslación para mover el sol en un arco
+            modelSol = glm::translate(modelSol, glm::vec3(xPos,-yPos, 0.0f));  // Invertimos xPos para mover desde -15 a 15
+
+            // Rotación alrededor de su propio eje Y
+            modelSol = glm::rotate(modelSol, glm::radians(sunRotate), glm::vec3(0.0f, 1.0f, 0.0f));
+
+            modelSol = glm::scale(modelSol, glm::vec3(1.0f)); // Escala el modelo
+
             glUniformMatrix4fv(glGetUniformLocation(lampshader.Program, "model"), 1, GL_FALSE, glm::value_ptr(modelSol));
             glBindVertexArray(VAO);
+            glUniform1i(glGetUniformLocation(lampshader.Program, "material.diffuse"), 0);
             sol.Draw(lampshader);
-            //glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
         }
         // Swap the buffers
         glfwSwapBuffers(window);
     }
 
+      
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 
@@ -465,6 +511,29 @@ void DoMovement()
         if (rot > -90.0f)
             rot -= 0.1f;
     }
+    //Limitación a 180° de la luna
+    if (keys[GLFW_KEY_L] && (moveMoon||moveSun)) {
+        moonRotate -= 0.1f;
+        if (moonRotate < -180.0f) {
+            moonRotate = -180.0f;
+        }
+        sunRotate -= 0.1;
+        if (sunRotate < -180.0f) {
+            sunRotate = -1800.0f;
+        }
+    }
+    //Limitación a 180° deL sol
+    if (keys[GLFW_KEY_O] && (moveSun||moveMoon)) {
+        sunRotate += 0.1f;
+        if (sunRotate > 0.0f) {
+            sunRotate = 0.0f;
+        }
+
+        moonRotate += 0.1;
+        if (moonRotate > 0.0f) {
+            moonRotate = 0.0f;
+        }
+    }
 
 
 }
@@ -500,18 +569,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
         moveMoon = false;
         moveSun = true;
         
-    }
-    //Limitación a 180° de la luna
-    if (keys[GLFW_KEY_L]) {
-        moonRotate -= 0.1f;
-        if (moonRotate < 180.0f) 
-            moonRotate = 180.0f;
-    }
-    //Limitación a 180° deL sol
-    if (keys[GLFW_KEY_O]) {
-        sunRotate += 0.1f;
-        if (sunRotate > 180.0f)
-            sunRotate = 180.0f;
     }
 
 
