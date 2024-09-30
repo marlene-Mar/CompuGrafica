@@ -322,7 +322,7 @@ int main()
         glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"), 1.0f, 0.8f, 0.6f);   //luz más intensa
         glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 0.9f, 0.9f, 0.7f);  //mas reflexión
         //noche
-        glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.ambient"), 0.3f, 0.3f, 0.4f);    //luz tenue y azulada
+        glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.ambient"), 0.6f, 0.6f ,0.8f);    //luz tenue y azulada
         glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.diffuse"), 0.4f, 0.34, 0.6f);    //luz difusa
         glUniform3f(glGetUniformLocation(lightingShader.Program, "newLight.specular"), 0.6f, 0.6f, 0.8f);   //reflexion suave 
 
