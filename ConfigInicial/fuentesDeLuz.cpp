@@ -154,12 +154,9 @@ int main()
 	Shader lightingShader("Shader/lighting.vs", "Shader/lighting.frag");
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
-<<<<<<< Updated upstream
+
 	Model Dog((char*)"Models/uploads_files_4930494_un1titled.obj");
-=======
-	Model Dog((char*)"Models/RedDog.obj");
->>>>>>> Stashed changes
-	Model Piso((char*)"Models/piso.obj");
+	Model piso((char*)"Models/piso.obj");
 
 
 
@@ -221,15 +218,14 @@ int main()
 
 		// Directional light
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
-<<<<<<< Updated upstream
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.3f,0.3f,0.3f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.3f, 0.3f, 0.3f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.1f, 0.1f, 0.1f);
-=======
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.05f,0.05f,0.05f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.05f, 0.05f, 0.05f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.3f, 0.3f, 0.3f);
->>>>>>> Stashed changes
+
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.3f,0.3f,0.3f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.3f, 0.3f, 0.3f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.1f, 0.1f, 0.1f);
+
 
 
 		// Point light 1
@@ -313,12 +309,12 @@ int main()
         view = camera.GetViewMatrix();	
 		model = glm::mat4(1);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		Piso.Draw(lightingShader);
+		piso.Draw(lightingShader);
 
 
 	
 		model = glm::mat4(1);
-<<<<<<< Updated upstream
+
 		model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f)); 
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
 		model = glm::translate(model, glm::vec3(0.0f, -3.5f, 0.1f));  // Traslada dog2 a otra posición
@@ -331,8 +327,7 @@ int main()
 
 		glBindVertexArray(0);
 
-		
-=======
+
 		//glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -340,7 +335,7 @@ int main()
 	    Dog.Draw(lightingShader);
 		//glDisable(GL_BLEND);  //Desactiva el canal alfa 
 		glBindVertexArray(0);
->>>>>>> Stashed changes
+
 	
 
 		// Also draw the lamp object, again binding the appropriate shader
