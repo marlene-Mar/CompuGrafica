@@ -592,7 +592,7 @@ void DoMovement()
 
 
 	//Cambios para Point light 2 - Faro
-	if (keys[GLFW_KEY_F]){
+	if (keys[GLFW_KEY_0]){
 		R1 += 0.01f;
 		if (R1 > 5.0f) R1 = 5.0f;
 	}
