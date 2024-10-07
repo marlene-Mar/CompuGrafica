@@ -192,6 +192,34 @@ int main()
 	Model xo((char*)"Models/xo.obj");	//Ruta de vela 3D
 	Model disco((char*)"Models/webtrcc.obj");	//Ruta de disco ball 3D
 
+	//Carga de texturas
+	int textureWidth, textureHeight, nrChannels;
+	unsigned char* image;
+	//Textura de XO 
+	GLuint textureXO;
+	glGenTextures(1, &textureXO);
+	glBindTexture(GL_TEXTURE_2D, textureXO);
+
+	stbi_set_flip_vertically_on_load(true);
+	image = stbi_load("Models/xo_low_lambert26_BaseColor.png", &textureWidth, &textureHeight, &nrChannels, 0);
+
+	if (image)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(image);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+
 
 
 	// First, set the container's VAO (and VBO)
@@ -210,8 +238,8 @@ int main()
 
 	// Set texture units
 	lightingShader.Use();
-	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.difuse"), 0);
-	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.specular"), 1);
+	glUniform1i(glGetUniformLocation(lightingShader.Program, "Material.diffuse"), 0);
+	glUniform1i(glGetUniformLocation(lightingShader.Program, "Naterial.specular"), 1);
 
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 100.0f);
 
@@ -329,7 +357,7 @@ int main()
 		GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
 		GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
-
+	
 		// Pass the matrices to the shader
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -487,6 +515,9 @@ int main()
 			model = glm::scale(model, glm::vec3(0.25f)); // Make it a smaller cube
 			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 			glBindVertexArray(VAO);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, textureXO);
+			glUniform1i(glGetUniformLocation(lightingShader.Program, "material.diffuse"), 0);
 			xo.Draw(lightingShader);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
@@ -567,173 +598,133 @@ void DoMovement()
 	}*/
 
 	// Cambios para Point light 1 - Focos
-	if (keys[GLFW_KEY_R])
-	{
+	if (keys[GLFW_KEY_Z]){
 		R0 += 0.01f;
-		if (R0 > 3.0f) R0 = 3.0f;  // Limitar el valor máximo a 3.0f
+		if (R0 > 5.0f) R0 = 5.0f;  
 	}
-	if (keys[GLFW_KEY_T])
-	{
+	if (keys[GLFW_KEY_X]){
 		R0 -= 0.01f;
-		if (R0 < 0.0f) R0 = 0.0f;  // Limitar el valor mínimo a 0.0f
+		if (R0 < 0.0f) R0 = 0.0f;  
 	}
-
-	if (keys[GLFW_KEY_Y])
-	{
+	if (keys[GLFW_KEY_C]){
 		G0 += 0.01f;
-		if (G0 > 3.0f) G0 = 3.0f;  // Limitar el valor máximo a 3.0f
+		if (G0 > 5.0f) G0 = 5.0f;  
 	}
-	if (keys[GLFW_KEY_U])
-	{
+	if (keys[GLFW_KEY_V]){
 		G0 -= 0.01f;
-		if (G0 < 0.0f) G0 = 0.0f;  // Limitar el valor mínimo a 0.0f
+		if (G0 < 0.0f) G0 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_I])
-	{
+	if (keys[GLFW_KEY_B]){
 		B0 += 0.01f;
-		if (B0 > 3.0f) B0 = 3.0f;  // Limitar el valor máximo a 3.0f
+		if (B0 > 3.0f) B0 = 3.0f;  
 	}
-	if (keys[GLFW_KEY_O])
-	{
+	if (keys[GLFW_KEY_N]){
 		B0 -= 0.01f;
-		if (B0 < 0.0f) B0 = 0.0f;  // Limitar el valor mínimo a 0.0f
+		if (B0 < 0.0f) B0 = 0.0f;  
 	}
 
 
-	/////////////////////////////////////////////// Cambios para Point light 2 - wwwFaro
-	if (keys[GLFW_KEY_F])
-	{
+	//Cambios para Point light 2 - Faro
+	if (keys[GLFW_KEY_F]){
 		R1 += 0.01f;
-		if (R1 > 3.0f) R1 = 3.0f;
+		if (R1 > 5.0f) R1 = 5.0f;
 	}
-	if (keys[GLFW_KEY_G])
-	{
+	if (keys[GLFW_KEY_F]){
 		R1 -= 0.01f;
 		if (R1 < 0.0f) R1 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_H])
-	{
+	if (keys[GLFW_KEY_G]){
 		G1 += 0.01f;
-		if (G1 > 3.0f) G1 = 3.0f;
+		if (G1 > 5.0f) G1 = 5.0f;
 	}
-	if (keys[GLFW_KEY_J])
-	{
+	if (keys[GLFW_KEY_H]){
 		G1 -= 0.01f;
 		if (G1 < 0.0f) G1 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_K])
-	{
+	if (keys[GLFW_KEY_J]){
 		B1 += 0.01f;
-		if (B1 > 3.0f) B1 = 3.0f;
+		if (B1 > 5.0f) B1 = 5.0f;
 	}
-	if (keys[GLFW_KEY_L])
-	{
+	if (keys[GLFW_KEY_K]){
 		B1 -= 0.01f;
 		if (B1 < 0.0f) B1 = 0.0f;
 	}
-	////////////////////////////////////////////// Cambios para Point light 3 - Disco ballw
+	//Cambios para Point light 3 - Disco ballw
 
-	if (keys[GLFW_KEY_1])
-	{
+	if (keys[GLFW_KEY_R]){
 		R2 += 0.01f;
-		if (R2 > 3.0f) R2 = 3.0f;
+		if (R2 > 5.0f) R2 = 5.0f;
 	}
-	if (keys[GLFW_KEY_2])
-	{
+	if (keys[GLFW_KEY_T]){
 		R2 -= 0.01f;
 		if (R2 < 0.0f) R2 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_3])
-	{
+	if (keys[GLFW_KEY_Y]){
 		G2 += 0.01f;
-		if (G2 > 3.0f) G2 = 3.0f;
+		if (G2 > 5.0f) G2 = 5.0f;
 	}
-	if (keys[GLFW_KEY_4])
-	{
+	if (keys[GLFW_KEY_U]){
 		G2 -= 0.01f;
 		if (G2 < 0.0f) G2 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_5])
-	{
+	if (keys[GLFW_KEY_I]){
 		B2 += 0.01f;
-		if (B2 > 3.0f) B2 = 3.0f;
+		if (B2 > 5.0f) B2 = 5.0f;
 	}
-	if (keys[GLFW_KEY_6])
-	{
+	if (keys[GLFW_KEY_O]){
 		B2 -= 0.01f;
 		if (B2 < 0.0f) B2 = 0.0f;
 	}
-	/////////////////////////////////////////////// Cambios para Point light 4
 
-	if (keys[GLFW_KEY_7])
-	{
+	// Cambios para Point light 4
+	if (keys[GLFW_KEY_1]){
 		R3 += 0.01f;
-		if (R3 > 3.0f) R3 = 3.0f;
+		if (R3 > 5.0f) R3 = 5.0f;
 	}
-	if (keys[GLFW_KEY_8])
-	{
+	if (keys[GLFW_KEY_2]){
 		R3 -= 0.01f;
 		if (R3 < 0.0f) R3 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_9])
-	{
+	if (keys[GLFW_KEY_3]){
 		G3 += 0.01f;
-		if (G3 > 3.0f) G3 = 3.0f;
+		if (G3 > 5.0f) G3 = 5.0f;
 	}
-	if (keys[GLFW_KEY_0])
-	{
+	if (keys[GLFW_KEY_4]){
 		G3 -= 0.01f;
 		if (G3 < 0.0f) G3 = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_P])
-	{
+	if (keys[GLFW_KEY_5]){
 		B3 += 0.01f;
-		if (B3 > 3.0f) B3 = 3.0f;
+		if (B3 > 5.0f) B3 = 5.0f;
 	}
-	if (keys[GLFW_KEY_Q])
-	{
+	if (keys[GLFW_KEY_6]){
 		B3 -= 0.01f;
 		if (B3 < 0.0f) B3 = 0.0f;
 	}
 
-	///////////////////////////////////////////// Cambios para Directional light
+	//Cambios para Directional light
 
-	if (keys[GLFW_KEY_B])
-	{
+	if (keys[GLFW_KEY_M]){
 		con += 0.01f;
-		if (con > 3.0f) con = 3.0f;
+		if (con > 5.0f) con = 5.0f;
 	}
-	if (keys[GLFW_KEY_N])
-	{
+	if (keys[GLFW_KEY_L]){
 		con -= 0.01f;
 		if (con < 0.0f) con = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_M])
-	{
+	if (keys[GLFW_KEY_P]){
 		lin += 0.01f;
-		if (lin > 3.0f) lin = 3.0f;
+		if (lin > 5.0f) lin = 5.0f;
 	}
-	if (keys[GLFW_KEY_1])
-	{
+	if (keys[GLFW_KEY_7]){
 		lin -= 0.01f;
 		if (lin < 0.0f) lin = 0.0f;
 	}
-
-	if (keys[GLFW_KEY_2])
-	{
+	if (keys[GLFW_KEY_8]){
 		qua += 0.01f;
 		if (qua > 3.0f) qua = 3.0f;
 	}
-	if (keys[GLFW_KEY_3])
-	{
+	if (keys[GLFW_KEY_9]){
 		qua -= 0.01f;
 		if (qua < 0.0f) qua = 0.0f;
 	}

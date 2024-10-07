@@ -60,6 +60,7 @@ uniform SpotLight spotLight;
 uniform Material material;
 uniform int transparency;
 
+
 // Function prototypes
 vec3 CalcDirLight( DirLight light, vec3 normal, vec3 viewDir );
 vec3 CalcPointLight( PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir );
