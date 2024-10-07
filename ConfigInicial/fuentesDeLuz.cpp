@@ -192,36 +192,6 @@ int main()
 	Model xo((char*)"Models/xo.obj");	//Ruta de vela 3D
 	Model disco((char*)"Models/webtrcc.obj");	//Ruta de disco ball 3D
 
-	//Carga de texturas
-	//int textureWidth, textureHeight, nrChannels;
-	//unsigned char* image;
-	////Textura de XO 
-	//GLuint textureXO;
-	//glGenTextures(1, &textureXO);
-	//glBindTexture(GL_TEXTURE_2D, textureXO);
-
-	//stbi_set_flip_vertically_on_load(true);
-	//image = stbi_load("Models/xo_low_lambert26_BaseColor.png", &textureWidth, &textureHeight, &nrChannels, 0);
-
-	//if (image)
-	//{
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	//	glGenerateMipmap(GL_TEXTURE_2D);
-	//}
-	//else
-	//{
-	//	std::cout << "Failed to load texture" << std::endl;
-	//}
-	//stbi_image_free(image);
-
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-
-
-
-
 	// First, set the container's VAO (and VBO)
 	GLuint VBO, VAO;
 	glGenVertexArrays(1, &VAO);
