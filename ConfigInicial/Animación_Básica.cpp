@@ -323,9 +323,9 @@ int main()
 		model = glm::mat4(1);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
-		model = glm::translate(model, glm::vec3(xDog, yDog, zDog)); //Translada a perro a la trayectoria circular 
+		model = glm::translate(model, glm::vec3(xDog, yDog, zDog)); //Translada al perro en la trayectoria circular 
 		//se aplica la rotación con la variable que será afectada por la animacion 
-		model = glm::rotate(model,angle, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación de la pelota PREVIO 
+		model = glm::rotate(model,angle, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación del perro según su posición en la circunferencia
 		//se manda al shader para verse reflejado en el modelo 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Dog.Draw(lightingShader);
@@ -342,7 +342,7 @@ int main()
 		//se aplica la rotación con la variable que será afectada por la animacion
 		//model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación de la pelota PREVIO
 
-		model = glm::translate(model, glm::vec3(xBall, yBall, zBall)); // Mover la pelota según la posición en y
+		model = glm::translate(model, glm::vec3(xBall, yBall, zBall)); // Mover la pelota según la posición 
 		//se manda al shader para verse reflejado en el modelo 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Ball.Draw(lightingShader); 
@@ -554,13 +554,11 @@ void Animation() {
 
 	//////////////// PRACTICA 9 /////////////////
 
-	//Rotación de pelota 
-	
 	//Animación de la rotación de la pelota
 	if (AnimBall)
 	{
 		rotBall -= 0.001f;
-		if (rotBall < -2 * 3.14f) rotBall += 2 * 3.14f;
+		if (rotBall < -2 * 3.14f) rotBall += 2 * 3.14f; //se asegura de que el ángulo sea correcto
 
 		//printf("%f", rotBall);
 	}
@@ -573,7 +571,7 @@ void Animation() {
 	if (AnimDog)
 	{
 		rotDog += 0.001f;
-		if (rotDog > 2 * 3.14f) rotDog -= 2 * 3.14f;
+		if (rotDog > 2 * 3.14f) rotDog -= 2 * 3.14f; //se asegura de que el ángulo sea correcto
 
 		//printf("%f", rotDog);
 	}
