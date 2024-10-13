@@ -117,21 +117,22 @@ glm::vec3 Light1 = glm::vec3(0);
 float iniDog = 0.0f;
 float iniBall = 3.14f;
 
-//Calculo de posición de la pelota en la trayectoria circular
+//Valiables para el calculo de posición de la pelota en la trayectoria circular
 float xBall = 1.0f;
 float zBall = 1.0f;
 float yBall = 0.0f;
 float rotBall = iniBall;
 bool AnimBall = false;
 
-//Calculo de posicoón del perro en la trayectoria circular
+//Variables para el calculo de posición del perro en la trayectoria circular
 float xDog = -1.0f;
 float zDog = -1.0f;
 float yDog = 0.0f;
 float rotDog = iniDog;
 bool AnimDog = false;
+float angle = 0.0f;
 
-//Animación rebote pelota
+//Variables para el rebote de la pelota pelota
 bool salto = false;   // Controla si están en el aire
 bool subiendo = true; // Controla si están subiendo o bajando
 float saltoVel = 1.0f; // Velocidad del salto
@@ -324,7 +325,7 @@ int main()
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		model = glm::translate(model, glm::vec3(xDog, yDog, zDog)); //Translada a perro a la trayectoria circular 
 		//se aplica la rotación con la variable que será afectada por la animacion 
-		//model = glm::rotate(model, glm::radians(rotDog), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación de la pelota PREVIO 
+		model = glm::rotate(model,angle, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotación de la pelota PREVIO 
 		//se manda al shader para verse reflejado en el modelo 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Dog.Draw(lightingShader);
@@ -580,6 +581,8 @@ void Animation() {
 	//Calculo de posición del perro en la trayectoria circular
 	xDog = 1.6f * cos(rotDog);
 	zDog = 1.6f * sin(rotDog);
+
+	angle = atan2(-sin(rotDog), cos(rotDog));  // Ángulo tangente a la trayectoria circular
 
 	//Animación del salto de perro y rebote de pelota
 
