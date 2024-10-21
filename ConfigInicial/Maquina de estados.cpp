@@ -538,7 +538,7 @@ void Animation() {
 		switch (stage) {
 
 		case 0:  // Primer segmento: camina hacia en frente
-			dogPos.z += 0.0001;
+			dogPos.z += 0.001;
 			if (dogPos.z >= 2.0f) {  // Limitar posición en z
 				stage = 1;  // Cambiar al siguiente segmento
 				tagRot = 90.0f; //rotación de 90°
@@ -547,7 +547,7 @@ void Animation() {
 			break;
 
 		case 1:  // Segundo segmento: camina hacia la derecha
-			dogPos.x += 0.0001;
+			dogPos.x += 0.001;
 			if (dogPos.x >= 1.8f) {  // Limitar posición en x
 				stage = 2;  // Cambiar al siguiente segmento
 				tagRot = 180.0f; //rotación 90° + 90° nuevos = 180°
@@ -556,7 +556,7 @@ void Animation() {
 			break;
 
 		case 2:  // Tercer segmento: camina hacia atrás 
-			dogPos.z -= 0.0001;
+			dogPos.z -= 0.001;
 			if (dogPos.z <= -1.5f) {  // Limitar posición en z
 				stage = 3;  // cambia al siguiente segmento	
 				tagRot = 315.0f; //rotación 180° + 135° = 315°
@@ -565,8 +565,8 @@ void Animation() {
 			break;
 
 		case 3: 
-			dogPos.x -= 0.0001;
-			dogPos.z += 0.0001;
+			dogPos.x -= 0.001;
+			dogPos.z += 0.001;
 			if (dogPos.x <= 0.0f && dogPos.z >= 0.0f) {  // Limitar posición en x y z
 				stage = 0;  // Cambiar al segmento inicial
 				tagRot = 360.0f; // rotación para regresar a la posición inicial
