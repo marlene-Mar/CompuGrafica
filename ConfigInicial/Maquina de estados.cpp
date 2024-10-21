@@ -514,7 +514,7 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 	}
 	if (keys[GLFW_KEY_B])
 	{
-		dogAnim = !dogAnim; //para activar o desactivar la animación
+		AnimDog = !AnimDog; //para activar o desactivar la animación
 	}
 	
 }
@@ -532,7 +532,7 @@ void Animation() {
 	}
 
 
-	if (dogAnim == 1 ) { //Inicio de animación
+	if (AnimDog) { //Inicio de animación
 
 		//Ciclo para generar las condicones de cada segmento del recorrido
 		switch (stage) {
@@ -573,19 +573,19 @@ void Animation() {
 				DogR = true; //verifica que se encuentra rotando
 			}
 			break;
-			}
+		}
 
-		// Animación de rotación
+		// Animación de rotación del perro
 		if (DogR) {
-			if (dogRot < tagRot) {
-				dogRot += 1.0f;
-				if (dogRot >= tagRot) {
-					dogRot = tagRot;  // Asegurar rotación exacta
-					DogR = false;  // Finalizar rotación
-				}
+			dogRot = glm::mix(dogRot, tagRot, 0.05f);  //Verifica el angulo actual con el angulo objetivo
+
+			// Comprobación de finalización de rotación
+			if (abs(dogRot - tagRot) < 0.01f) {  // Si la rotación está cerca del amgulo objetivo
+				dogRot = tagRot;  // Asegurar rotación
+				DogR = false;  // Finalizar rotación
 			}
 		}
-		
+
 
 		if (!step) { //state 1: false
 			RLegs += 0.03f;
