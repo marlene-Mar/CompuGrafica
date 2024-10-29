@@ -1,3 +1,8 @@
+﻿/* Práctica 11: Animación por KeyFrames
+* Marlene Mariana De la Cruz Padilla
+* Fecha: 29 de octubre de 2024
+*/
+
 #include <iostream>
 #include <cmath>
 
@@ -103,18 +108,24 @@ glm::vec3 Light1 = glm::vec3(0);
 float rotBall = 0.0f;
 float rotDog = 0.0f;
 int dogAnim = 0;
+float FLegs = 0.0f;
 float FLegsL = 0.0f;
 float FLegsR = 0.0f;
 float RLegs = 0.0f;
 float head = 0.0f;
 float tail = 0.0f;
 
-
+float rotDogX = 0; //Variable para rotación
+float radio = 0.25f;  // Radio del círculo
+float angleInc = 0.01f;  // Incremento del ángulo para cada frame
+float angle = 0.0f;  // Ángulo inicial
+bool moveRot = false; 
+float speed = 0.0001f;
 
 //KeyFrames
 float dogPosX , dogPosY , dogPosZ  ;
 
-#define MAX_FRAMES 9
+#define MAX_FRAMES 50
 int i_max_steps = 500;
 int i_curr_steps = 0;
 typedef struct _frame {
@@ -127,18 +138,23 @@ typedef struct _frame {
 	float incX;
 	float incY;
 	float incZ;
+	float incXR;
+	float incZR;
 	float head;
 	float headInc;
 	float tail;
 	float tailInc;
+	float FLegs;
+	float FLegsInc;
 	float FLegsL;
 	float FLegsLInc;
 	float FLegsR;
 	float FLegsRInc;
 	float RLegs;
 	float RLegsInc;
-
-
+	//Variables para la rotación
+	float rotDogX;
+	float rotDogXInc; 
 
 }FRAME;
 
@@ -146,6 +162,73 @@ FRAME KeyFrame[MAX_FRAMES];
 int FrameIndex = 0;			//introducir datos
 bool play = false;
 int playIndex = 0;
+
+
+// Función para guardar la animación
+void SaveAnimation(const char* filename = "Animacion.txt") {
+	std::ofstream file(filename);
+	if (!file.is_open()) {
+		std::cerr << "Error al abrir el archivo para guardar." << std::endl;
+		return;
+	}
+
+	for (int i = 0; i < FrameIndex; i++) {
+		file << KeyFrame[i].dogPosX << " "
+			<< KeyFrame[i].dogPosY << " "
+			<< KeyFrame[i].dogPosZ << " "
+			<< KeyFrame[i].rotDog << " "
+			<< KeyFrame[i].head << " "
+			<< KeyFrame[i].tail << " "
+			<< KeyFrame[i].FLegs << " "
+			<< KeyFrame[i].FLegsL << " "
+			<< KeyFrame[i].FLegsR << " "
+			<< KeyFrame[i].RLegs << " "
+			<< KeyFrame[i].rotDogX << "\n";
+	}
+	file.close();
+	std::cout << "Animación guardada correctamente." << std::endl;
+}
+
+// Función para cargar los KeyFrames
+void LoadAnimation(const char* filename = "Animacion.txt") {
+	std::ifstream file(filename);
+	if (!file.is_open()) {
+		std::cerr << "Error al abrir el archivo para cargar." << std::endl;
+		return;
+	}
+
+	FrameIndex = 0;
+	while (FrameIndex < MAX_FRAMES &&
+		file >> KeyFrame[FrameIndex].dogPosX
+			>> KeyFrame[FrameIndex].dogPosY
+			>> KeyFrame[FrameIndex].dogPosZ
+			>> KeyFrame[FrameIndex].rotDog
+			>> KeyFrame[FrameIndex].head
+			>> KeyFrame[FrameIndex].tail
+			>> KeyFrame[FrameIndex].FLegs
+			>> KeyFrame[FrameIndex].FLegsL
+			>> KeyFrame[FrameIndex].FLegsR
+			>> KeyFrame[FrameIndex].RLegs
+			>> KeyFrame[FrameIndex].rotDogX) {
+		FrameIndex++;
+	}
+}
+
+// Función para imprimir el contenido del archivo .txt en consola
+void PrintAnimation(const char* filename = "Animacion.txt") {
+	std::ifstream file(filename);
+	if (!file.is_open()) {
+		std::cerr << "Error al abrir el archivo para imprimir." << std::endl;
+		return;
+	}
+
+	std::string line;
+	std::cout << "Contenido del archivo " << filename << ":\n";
+	while (std::getline(file, line)) {
+		std::cout << line << std::endl;
+	}
+	file.close();
+}
 
 void saveFrame(void)
 {
@@ -157,15 +240,19 @@ void saveFrame(void)
 	KeyFrame[FrameIndex].dogPosZ = dogPosZ;
 
 	KeyFrame[FrameIndex].rotDog = rotDog;
+	KeyFrame[FrameIndex].rotDogX = rotDogX;
+
 
 	KeyFrame[FrameIndex].head = head;
 	KeyFrame[FrameIndex].tail = tail;
+	KeyFrame[FrameIndex].FLegs = FLegs;
 	KeyFrame[FrameIndex].FLegsL = FLegsL;
 	KeyFrame[FrameIndex].FLegsR = FLegsR;
 	KeyFrame[FrameIndex].RLegs = RLegs;
 
 	FrameIndex++;
 }
+
 
 void resetElements(void)
 {
@@ -177,9 +264,12 @@ void resetElements(void)
 	tail = KeyFrame[0].tail;
 	FLegsL = KeyFrame[0].FLegsL;
 	FLegsR = KeyFrame[0].FLegsR;
+	FLegs = KeyFrame[0].FLegs;
 	RLegs = KeyFrame[0].RLegs;
 
 	rotDog = KeyFrame[0].rotDog;
+	rotDogX = KeyFrame[0].rotDogX;
+
 
 }
 void interpolation(void)
@@ -193,9 +283,13 @@ void interpolation(void)
 	KeyFrame[playIndex].tailInc = (KeyFrame[playIndex + 1].tail - KeyFrame[playIndex].tail) / i_max_steps;
 	KeyFrame[playIndex].FLegsLInc= (KeyFrame[playIndex + 1].FLegsL - KeyFrame[playIndex].FLegsL) / i_max_steps;
 	KeyFrame[playIndex].FLegsRInc = (KeyFrame[playIndex + 1].FLegsR - KeyFrame[playIndex].FLegsR) / i_max_steps;
+	KeyFrame[playIndex].FLegsInc = (KeyFrame[playIndex + 1].FLegs - KeyFrame[playIndex].FLegs) / i_max_steps;
 	KeyFrame[playIndex].RLegsInc = (KeyFrame[playIndex + 1].RLegs - KeyFrame[playIndex].RLegs) / i_max_steps;
 
 	KeyFrame[playIndex].rotDogInc = (KeyFrame[playIndex + 1].rotDog - KeyFrame[playIndex].rotDog) / i_max_steps;
+	KeyFrame[playIndex].rotDogXInc = (KeyFrame[playIndex + 1].rotDogX - KeyFrame[playIndex].rotDogX) / i_max_steps;
+
+	printf("Interpolando cuadro %d a %d: IncX = %f\n", playIndex, playIndex + 1, KeyFrame[playIndex].incX);
 
 }
 
@@ -279,10 +373,14 @@ int main()
 		KeyFrame[i].incZ = 0;
 		KeyFrame[i].rotDog = 0;
 		KeyFrame[i].rotDogInc = 0;
+		KeyFrame[i].rotDogX = 0;
+		KeyFrame[i].rotDogXInc = 0;
 		KeyFrame[i].head = 0;
 		KeyFrame[i].headInc = 0;
 		KeyFrame[i].tail = 0;
 		KeyFrame[i].tailInc = 0;
+		KeyFrame[i].FLegs = 0;
+		KeyFrame[i].FLegsInc = 0;
 		KeyFrame[i].FLegsL = 0;
 		KeyFrame[i].FLegsLInc = 0;
 		KeyFrame[i].FLegsR = 0;
@@ -318,7 +416,7 @@ int main()
 	
 	glm::mat4 projection = glm::perspective(camera.GetZoom(), (GLfloat)SCREEN_WIDTH / (GLfloat)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-	// Game loop
+	// Game loop r
 	while (!glfwWindowShouldClose(window))
 	{
 
@@ -339,7 +437,7 @@ int main()
 		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
 
-		
+
 		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
 		
 	
@@ -422,7 +520,8 @@ int main()
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		//Body
 		modelTemp= model = glm::translate(model, glm::vec3(dogPosX,dogPosY,dogPosZ));
-		modelTemp= model = glm::rotate(model, glm::radians(rotDog), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelTemp= model = glm::rotate(model, glm::radians(rotDog), glm::vec3(0.0f, 1.0f, 0.0f)); //Rotación en y
+		modelTemp = model = glm::rotate(model, glm::radians(rotDogX), glm::vec3(1.0f, 0.0f, 0.0f)); //Rotación en x 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		DogBody.Draw(lightingShader);
 		//Head
@@ -441,12 +540,14 @@ int main()
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(0.112f, -0.044f, 0.074f));
 		model = glm::rotate(model, glm::radians(FLegsL), glm::vec3(-1.0f, 0.0f, 0.0f)); 
+		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(-1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		F_LeftLeg.Draw(lightingShader);
 		//Front Right Leg
 		model = modelTemp; 
 		model = glm::translate(model, glm::vec3(-0.111f, -0.055f, 0.074f));
 		model = glm::rotate(model, glm::radians(FLegsR), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		F_RightLeg.Draw(lightingShader);
 		//Back Left Leg
@@ -463,16 +564,16 @@ int main()
 		B_RightLeg.Draw(lightingShader); 
 
 
-		model = glm::mat4(1);
-		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
-		model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	    Ball.Draw(lightingShader); 
-		glDisable(GL_BLEND);  //Desactiva el canal alfa 
-		glBindVertexArray(0);
+		//model = glm::mat4(1);
+		//glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
+		//model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	 //   Ball.Draw(lightingShader); 
+		//glDisable(GL_BLEND);  //Desactiva el canal alfa 
+		//glBindVertexArray(0);
 	
 
 		// Also draw the lamp object, again binding the appropriate shader
@@ -520,113 +621,47 @@ int main()
 void DoMovement()
 {
 	//Dog Controls
-	if (keys[GLFW_KEY_2])
+	if (keys[GLFW_KEY_1])
 	{
-
-		rotDog += 0.1f;
-
+		angle += speed;  // Incrementa el ángulo para el movimiento circular
+		dogPosX = radio * cos(angle); // Posición en X
+		dogPosZ = radio * sin(angle); // Posición en Z
+		rotDog += 0.05f;
+		FLegs = 15.0f * sin(rotDog * 0.05f); // Mueve las patas delanteras
+		RLegs = 15.0f * sin(rotDog * 0.05f);  // Mueve las patas traseras
+		// Mantener circularAngle en el rango [0, 2π]
+		if (angle > 2 * 3.15) {
+			angle -= 2 * 3.15;
+		}
 	}
 
-	if (keys[GLFW_KEY_3])
-	{
+	if (keys[GLFW_KEY_2]) rotDogX += 0.1f;
+	if (keys[GLFW_KEY_3]) rotDogX -= 0.1f;
 
-		rotDog -= 0.1f;
+	if (keys[GLFW_KEY_4]) head += 0.1f;
+	if (keys[GLFW_KEY_5]) head -= 0.1f;
 
-	}
-	if (keys[GLFW_KEY_4])
-	{
+	if (keys[GLFW_KEY_6]) tail += 0.1f;
+	if (keys[GLFW_KEY_7]) tail -= 0.1f;
 
-		head += 0.1f;
+	if (keys[GLFW_KEY_8]) FLegsL += 0.1f;
+	if (keys[GLFW_KEY_9]) FLegsL -= 0.1f;
 
-	}
-	
-	if (keys[GLFW_KEY_5])
-	{
-		
-		head -= 0.1f;
+	if (keys[GLFW_KEY_Z]) FLegsR += 0.1f;
+	if (keys[GLFW_KEY_X]) FLegsR -= 0.1f;
 
-	}
-	if (keys[GLFW_KEY_6])
-	{
+	if (keys[GLFW_KEY_M]) RLegs += 0.1f;
+	if (keys[GLFW_KEY_N]) RLegs -= 0.1f;
 
-		tail += 0.1f;
+	if (keys[GLFW_KEY_H]) dogPosZ += 0.001;
+	if (keys[GLFW_KEY_Y]) dogPosZ -= 0.001;
 
-	}
+	if (keys[GLFW_KEY_G]) dogPosX -= 0.001;
+	if (keys[GLFW_KEY_J]) dogPosX += 0.001;
 
-	if (keys[GLFW_KEY_7])
-	{
+	if (keys[GLFW_KEY_C]) dogPosY -= 0.001;
+	if (keys[GLFW_KEY_V]) dogPosY += 0.001;
 
-		tail -= 0.1f;
-
-	}
-	if (keys[GLFW_KEY_8])
-	{
-
-		FLegsL += 0.1f;
-
-	}
-
-	if (keys[GLFW_KEY_9])
-	{
-
-		FLegsL -= 0.1f;
-
-	}
-
-	if (keys[GLFW_KEY_Z])
-	{
-
-		FLegsR += 0.1f;
-
-	}
-
-	if (keys[GLFW_KEY_X])
-	{
-
-		FLegsR -= 0.1f;
-
-	}
-
-	if (keys[GLFW_KEY_M])
-	{
-		RLegs += 0.1f;
-		
-	}
-	if (keys[GLFW_KEY_N])
-	{
-		RLegs -= 0.1f;
-
-	}
-
-	if (keys[GLFW_KEY_H])
-	{
-		dogPosZ += 0.001;
-	}
-
-	if (keys[GLFW_KEY_Y])
-	{
-		dogPosZ -= 0.001;
-	}
-
-	if (keys[GLFW_KEY_G])
-	{
-		dogPosX -= 0.001;
-	}
-
-	if (keys[GLFW_KEY_J])
-	{
-		dogPosX += 0.001;
-	}
-
-	if (keys[GLFW_KEY_C])
-	{
-		dogPosY -= 0.001;
-	}
-
-	if (keys[GLFW_KEY_V])
-	{
-		dogPosY += 0.001;
-	}
 
 	// Camera controls
 	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
@@ -683,6 +718,7 @@ void DoMovement()
 	{
 		pointLightPositions[0].z += 0.01f;
 	}
+
 	
 }
 
@@ -690,21 +726,16 @@ void DoMovement()
 void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
 
-	if (keys[GLFW_KEY_L])
-	{
-		if (play == false && (FrameIndex > 1))
-		{
-
-			resetElements();
+	if (keys[GLFW_KEY_L]){
+		if (!play && FrameIndex > 1) {
+			resetElements(); // Resetear los elementos a los primeros keyframes cargados
 			//First Interpolation				
 			interpolation();
 
 			play = true;
 			playIndex = 0;
 			i_curr_steps = 0;
-		}
-		else
-		{
+		}else{
 			play = false;
 		}
 
@@ -714,10 +745,21 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 	{
 		if (FrameIndex < MAX_FRAMES)
 		{
-			saveFrame();
+			saveFrame(); //Almacena cada frame
 		}
 
 	}
+	if (key == GLFW_KEY_Q) {
+		SaveAnimation();  // Guarda la animación en "Animacion.txt"
+	}
+
+	if (key == GLFW_KEY_R && GLFW_PRESS == action) {
+		
+		resetElements();  // Resetear los elementos a los primeros keyframes cargados
+		LoadAnimation(); //Carga la animación por medio del archivo previamente guardado
+		PrintAnimation(); //Imprime en terminar los valores del archivo
+	}
+
 
 
 
@@ -761,10 +803,10 @@ void Animation() {
 		if (i_curr_steps >= i_max_steps) //end of animation between frames?
 		{
 			playIndex++;
-			if (playIndex > FrameIndex - 2)	//end of total animation?
+			if (playIndex >= FrameIndex - 1)	//end of total animation?
 			{
 				printf("termina anim\n");
-				playIndex = 0;
+				//playIndex = 0;
 				play = false;
 			}
 			else //Next frame interpolations
@@ -785,8 +827,9 @@ void Animation() {
 			FLegsL += KeyFrame[playIndex].FLegsLInc;
 			FLegsR += KeyFrame[playIndex].FLegsRInc;
 			RLegs += KeyFrame[playIndex].RLegsInc;
-
+			FLegs += KeyFrame[playIndex].FLegsInc;
 			rotDog += KeyFrame[playIndex].rotDogInc;
+			rotDogX += KeyFrame[playIndex].rotDogXInc;
 
 			i_curr_steps++;
 		}
